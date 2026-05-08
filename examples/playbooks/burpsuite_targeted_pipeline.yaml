@@ -1,0 +1,50 @@
+metadata:
+  name: burpsuite_targeted_pipeline
+  description: Burp-centric web assessment with quick pipeline scan and targeted vuln checks.
+  tags: [burp, web, pentest]
+  owner: secops
+  source: example
+  updated_at: "2026-04-19T00:00:00Z"
+  version: 1
+inputs:
+  target: ""
+  extra: {}
+steps:
+  - id: burp_quick_report
+    tool: burp_scan_with_report
+    args:
+      target: "{{target}}"
+      scan_type: "quick"
+      report_format: "html"
+      timeout: 1200
+    depends_on: []
+    retries: 0
+    timeout_seconds: 1320
+    on_failure: continue
+  - id: burp_targeted_checks
+    tool: burp_check_vulns
+    args:
+      target: "{{target}}{{vuln_test_path}}"
+      checks: "sqli,xss,ssrf,rce,lfi,open_redirect"
+      timeout: 900
+    depends_on: [burp_quick_report]
+    retries: 0
+    timeout_seconds: 1020
+    on_failure: continue
+  - id: supplementary_nuclei
+    tool: nuclei_scan
+    args:
+      target: "{{target}}"
+      severity: "critical,high,medium"
+      tags: "sqli,xss,rce,ssrf,cve"
+      timeout: 600
+    depends_on: [burp_targeted_checks]
+    retries: 0
+    timeout_seconds: 720
+    on_failure: continue
+retry_policy:
+  max_retries: 1
+guardrails:
+  require_target: true
+output_contract:
+  artifacts: [report_paths, path, report_file]

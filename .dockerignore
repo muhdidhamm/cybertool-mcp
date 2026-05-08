@@ -1,0 +1,13 @@
+.git
+.gitignore
+*.md
+!requirements.txt
+__pycache__
+*.pyc
+.venv
+.env
+.cursor
+agent-transcripts
+terminals
+mcps
+node_modules

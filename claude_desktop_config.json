@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "unified-threatlens": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--cap-add", "NET_RAW",
+        "--cap-add", "NET_ADMIN",
+        "-v", "unified-threatlens-output:/opt/uts-mcp/output",
+        "-v", "unified-threatlens-data:/opt/uts-mcp/data",
+        "-v", "unified-threatlens-reports:/opt/uts-mcp/reports",
+        "-v", "unified-threatlens-logs:/opt/uts-mcp/logs",
+        "git.abyres.net/mcp/unified-threatlens-server:latest"
+      ],
+      "env": {
+        "AUTO_UPDATE": "first",
+        "MCP_AUDIT_LOG_ENABLED": "true",
+        "MCP_AUDIT_LOG_PATH": "/opt/uts-mcp/logs/mcp_audit.jsonl",
+        "MCP_AUDIT_MAX_FIELD_CHARS": "4000",
+        "REMOTE_SSH_KEY_PATH": "/opt/uts-mcp/data/ssh-keys/mcp_remote_ed25519",
+        "MCP_DASHBOARD_ENABLED": "true",
+        "MCP_DASHBOARD_HOST": "0.0.0.0",
+        "MCP_DASHBOARD_PORT": "8090",
+        "MCP_DASHBOARD_USERNAME": "secops",
+        "MCP_DASHBOARD_PASSWORD": "secops",
+        "MCP_DASHBOARD_PASSWORD_HASH": "pbkdf2_sha256$200000$2e0999d270dab64eb1267ec0d95f8a3a$4dd37a44f39bdc2827c3e6fe0658e5462917b08c8a326b3b8e3301ac3199ed4c",
+        "MCP_DASHBOARD_LOGIN_MAX_ATTEMPTS": "5",
+        "MCP_DASHBOARD_LOGIN_WINDOW_SECONDS": "300",
+        "MCP_DASHBOARD_LOGIN_LOCKOUT_SECONDS": "900",
+        "MCP_DASHBOARD_COOKIE_SECURE": "false",
+        "TIMEZONE": "Asia/Kuala_Lumpur",
+        "TZ": "Asia/Kuala_Lumpur"
+      }
+    },
+    "unified-threatlens-stream": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@0.1.38",
+        "http://localhost:8080/mcp"
+      ]
+    }
+  }
+}

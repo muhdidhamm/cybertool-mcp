@@ -1,0 +1,36 @@
+metadata:
+  name: incident_triage_memory
+  description: Cloud + memory first-response triage
+  tags: [incident-response, memory, cloud]
+  owner: secops
+  source: example
+  updated_at: "2026-04-18T00:00:00Z"
+  version: 1
+inputs:
+  target: ""
+  extra: {}
+steps:
+  - id: cloud_triage
+    tool: cloud_triage_aws_ssm
+    args:
+      instance_id: "{{target}}"
+      command: "uname -a && df -hT && ps aux | head -n 100"
+    depends_on: []
+    retries: 1
+    timeout_seconds: 300
+    on_failure: continue
+  - id: mem_pipeline
+    tool: volatility3_memory_pipeline
+    args:
+      memory_dump: "/opt/uts-mcp/output/latest.mem"
+      profile: "auto"
+    depends_on: []
+    retries: 0
+    timeout_seconds: 600
+    on_failure: continue
+retry_policy:
+  max_retries: 1
+guardrails:
+  require_target: true
+output_contract:
+  artifacts: [report_file, report_paths]

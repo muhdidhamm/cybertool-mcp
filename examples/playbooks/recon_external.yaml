@@ -1,0 +1,35 @@
+metadata:
+  name: recon_external
+  description: External reconnaissance baseline
+  tags: [recon, external]
+  owner: secops
+  source: example
+  updated_at: "2026-04-18T00:00:00Z"
+  version: 1
+inputs:
+  target: ""
+  extra: {}
+steps:
+  - id: passive_enum
+    tool: subfinder_subdomains
+    args:
+      domain: "{{target}}"
+    depends_on: []
+    retries: 1
+    timeout_seconds: 300
+    on_failure: continue
+  - id: active_scan
+    tool: nmap_scan
+    args:
+      target: "{{target}}"
+      ports: "1-1000"
+    depends_on: []
+    retries: 0
+    timeout_seconds: 600
+    on_failure: stop
+retry_policy:
+  max_retries: 1
+guardrails:
+  require_target: true
+output_contract:
+  artifacts: [report_paths]

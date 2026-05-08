@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title }}</title>
+<style>
+:root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #334155;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --accent: #3b82f6;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --orange: #f97316;
+    --red: #ef4444;
+    --critical: #dc2626;
+    --border: #475569;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+header h1 {
+    font-size: 1.75rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+.meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    color: var(--text2);
+    font-size: 0.875rem;
+}
+.meta dt { font-weight: 600; color: var(--text); }
+.meta dd { margin-bottom: 0.5rem; }
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+}
+.card .count { font-size: 2rem; font-weight: 700; }
+.card .label { font-size: 0.8rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; }
+.card.critical .count { color: var(--critical); }
+.card.high .count { color: var(--red); }
+.card.medium .count { color: var(--orange); }
+.card.low .count { color: var(--yellow); }
+.card.info .count { color: var(--accent); }
+section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+section h2 {
+    font-size: 1.25rem;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+.finding {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--border);
+}
+.finding.critical { border-left-color: var(--critical); }
+.finding.high { border-left-color: var(--red); }
+.finding.medium { border-left-color: var(--orange); }
+.finding.low { border-left-color: var(--yellow); }
+.finding.info { border-left-color: var(--accent); }
+.finding h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+.severity-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.severity-badge.critical { background: var(--critical); color: #fff; }
+.severity-badge.high { background: var(--red); color: #fff; }
+.severity-badge.medium { background: var(--orange); color: #000; }
+.severity-badge.low { background: var(--yellow); color: #000; }
+.severity-badge.info { background: var(--accent); color: #fff; }
+.description { color: var(--text2); margin: 0.5rem 0; font-size: 0.9rem; }
+.evidence {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    font-family: 'Cascadia Code', 'Fira Code', monospace;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-x: auto;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.recommendation {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+.recommendation::before { content: "Recommendation: "; font-weight: 600; color: var(--green); }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+}
+th, td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    text-align: left;
+}
+th { background: var(--surface2); font-weight: 600; }
+tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+footer {
+    text-align: center;
+    color: var(--text2);
+    font-size: 0.75rem;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+@media print {
+    body { background: #fff; color: #000; padding: 0; }
+    :root { --bg: #fff; --surface: #f9f9f9; --surface2: #f0f0f0; --text: #111; --text2: #555; --border: #ddd; }
+    .finding { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+    <h1>{{ title }}</h1>
+    <p style="color: var(--text2);">{{ subtitle }}</p>
+    <dl class="meta">
+        <div><dt>Target</dt><dd>{{ target }}</dd></div>
+        <div><dt>Date</dt><dd>{{ date }}</dd></div>
+        <div><dt>Tester</dt><dd>{{ tester }}</dd></div>
+        <div><dt>Scope</dt><dd>{{ scope }}</dd></div>
+    </dl>
+</header>
+
+{% if severity_counts %}
+<div class="summary-cards">
+    <div class="card critical"><div class="count">{{ severity_counts.critical | default(0) }}</div><div class="label">Critical</div></div>
+    <div class="card high"><div class="count">{{ severity_counts.high | default(0) }}</div><div class="label">High</div></div>
+    <div class="card medium"><div class="count">{{ severity_counts.medium | default(0) }}</div><div class="label">Medium</div></div>
+    <div class="card low"><div class="count">{{ severity_counts.low | default(0) }}</div><div class="label">Low</div></div>
+    <div class="card info"><div class="count">{{ severity_counts.info | default(0) }}</div><div class="label">Info</div></div>
+</div>
+{% endif %}
+
+{% if executive_summary %}
+<section>
+    <h2>Executive Summary</h2>
+    <p>{{ executive_summary }}</p>
+</section>
+{% endif %}
+
+{% if findings %}
+<section>
+    <h2>Findings</h2>
+    {% for f in findings %}
+    <div class="finding {{ f.severity | lower }}">
+        <h3><span class="severity-badge {{ f.severity | lower }}">{{ f.severity }}</span> {{ f.title }}</h3>
+        {% if f.description %}<p class="description">{{ f.description }}</p>{% endif %}
+        {% if f.evidence %}<div class="evidence">{{ f.evidence }}</div>{% endif %}
+        {% if f.recommendation %}<div class="recommendation">{{ f.recommendation }}</div>{% endif %}
+        {% if f.references %}<p class="description"><strong>References:</strong> {{ f.references }}</p>{% endif %}
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% if tool_outputs %}
+<section>
+    <h2>Tool Outputs</h2>
+    {% for tool in tool_outputs %}
+    <div class="finding info">
+        <h3>{{ tool.tool_name }} {% if tool.target %}— {{ tool.target }}{% endif %}</h3>
+        <p class="description">Command: <code>{{ tool.command }}</code> | Elapsed: {{ tool.elapsed }}s</p>
+        <div class="evidence">{{ tool.output }}</div>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% if recommendations %}
+<section>
+    <h2>Remediation Summary</h2>
+    <table>
+        <thead><tr><th>#</th><th>Severity</th><th>Finding</th><th>Recommendation</th></tr></thead>
+        <tbody>
+        {% for i, r in enumerate(recommendations) %}
+        <tr>
+            <td>{{ i + 1 }}</td>
+            <td><span class="severity-badge {{ r.severity | lower }}">{{ r.severity }}</span></td>
+            <td>{{ r.title }}</td>
+            <td>{{ r.recommendation }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endif %}
+
+<footer>
+    Generated by Unified ThreatLens MCP Server | {{ date }}
+</footer>
+</div>
+</body>
+</html>

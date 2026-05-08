@@ -1,0 +1,58 @@
+metadata:
+  name: tls_exposure_audit
+  description: TLS posture and HTTPS exposure audit for internet-facing services.
+  tags: [tls, ssl, hardening]
+  owner: secops
+  source: example
+  updated_at: "2026-04-19T00:00:00Z"
+  version: 1
+inputs:
+  target: ""
+  extra: {}
+steps:
+  - id: fast_tls_audit
+    tool: testssl_check
+    args:
+      target: "{{target}}"
+      timeout: 600
+    depends_on: []
+    retries: 0
+    timeout_seconds: 720
+    on_failure: continue
+  - id: cipher_and_cert_scan
+    tool: sslscan_check
+    args:
+      target: "{{target}}"
+    depends_on: [fast_tls_audit]
+    retries: 0
+    timeout_seconds: 300
+    on_failure: continue
+  - id: service_banner_validation
+    tool: nmap_scan
+    args:
+      target: "{{target}}"
+      scan_type: "-sV"
+      ports: "443,8443,9443"
+      scripts: "ssl-cert,ssl-enum-ciphers"
+      timeout: 600
+    depends_on: [fast_tls_audit]
+    retries: 0
+    timeout_seconds: 720
+    on_failure: continue
+  - id: web_tls_template_checks
+    tool: nuclei_scan
+    args:
+      target: "{{target}}"
+      severity: "critical,high,medium"
+      tags: "tls,ssl,misconfig,exposure,default-login"
+      timeout: 600
+    depends_on: [cipher_and_cert_scan, service_banner_validation]
+    retries: 0
+    timeout_seconds: 720
+    on_failure: continue
+retry_policy:
+  max_retries: 1
+guardrails:
+  require_target: true
+output_contract:
+  artifacts: [report_paths, path, report_file]

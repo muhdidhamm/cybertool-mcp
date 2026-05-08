@@ -1,0 +1,52 @@
+metadata:
+  name: service_vuln_baseline
+  description: Baseline service exposure and vulnerability sweep for infrastructure targets.
+  tags: [service-scan, vuln, infra]
+  owner: secops
+  source: example
+  updated_at: "2026-04-19T00:00:00Z"
+  version: 1
+inputs:
+  target: ""
+  extra: {}
+steps:
+  - id: port_service_inventory
+    tool: nmap_scan
+    args:
+      target: "{{target}}"
+      scan_type: "-sV -sC"
+      ports: "1-1024,3306,3389,5432,6379,8080,8443"
+      timeout: 480
+    depends_on: []
+    retries: 0
+    timeout_seconds: 600
+    on_failure: stop
+  - id: vuln_nse_pass
+    tool: nmap_scan
+    args:
+      target: "{{target}}"
+      scan_type: "-sV"
+      scripts: "vuln"
+      timeout: 600
+    depends_on: [port_service_inventory]
+    retries: 0
+    timeout_seconds: 720
+    on_failure: continue
+  - id: nuclei_network_templates
+    tool: nuclei_scan
+    args:
+      target: "{{target}}"
+      severity: "critical,high,medium"
+      tags: "network,default-login,exposure,cve"
+      timeout: 600
+    depends_on: [port_service_inventory]
+    retries: 0
+    timeout_seconds: 720
+    on_failure: continue
+retry_policy:
+  max_retries: 1
+guardrails:
+  require_target: true
+  allowed_scopes: ["authorized assets only"]
+output_contract:
+  artifacts: [report_paths, path, report_file]

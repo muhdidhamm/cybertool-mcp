@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unified ThreatLens Dashboard</title>
+  <link rel="stylesheet" href="/assets/dashboard.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-header" role="banner">
+      <div class="brand-block">
+        <h1>Unified ThreatLens Dashboard</h1>
+        <p class="muted">Security operations overview for sessions, artifacts, playbooks, and subscription health.</p>
+      </div>
+      <div class="header-actions">
+        <div id="globalStatus" class="global-status" aria-live="polite">Ready</div>
+        <button id="densityToggleBtn" class="density-toggle" type="button" aria-label="Toggle compact density">Compact mode</button>
+        <button id="refreshBtn" type="button" aria-label="Refresh dashboard data">Refresh</button>
+        <a class="logout-link" href="/logout">Logout</a>
+      </div>
+    </header>
+
+    <div class="layout-grid">
+      <aside class="session-rail" aria-label="Session list and filters">
+        <div class="session-rail-header">
+          <h2>Scan AI Sessions</h2>
+          <p class="muted" id="sessionSummary">Loading session summary...</p>
+        </div>
+        <div class="session-filter">
+          <label for="sessionFilterInput">Filter sessions</label>
+          <input id="sessionFilterInput" type="search" placeholder="Search by caption or session id" />
+        </div>
+        <div id="sessions" aria-live="polite"></div>
+      </aside>
+
+      <main class="main-content" role="main">
+        <div id="subscriptionBanner" class="sub-banner sub-banner-info" aria-live="polite">Loading subscription status...</div>
+
+        <nav class="menu" aria-label="Dashboard sections">
+          <a href="#sessionDetails" data-view="sessionDetails">Session Timeline</a>
+          <a href="#reports" data-view="reports">Reports</a>
+          <a href="#outputs" data-view="outputs">Output Files</a>
+          <a href="#playbooks" data-view="playbooks">Playbooks</a>
+          <a href="#subscription" data-view="subscription">Subscription</a>
+        </nav>
+
+        <section id="view-sessionDetails" class="view-section">
+          <h2>Session Details</h2>
+          <div id="sessionDetails" class="muted">Select a session to inspect chat turns, tool executions, and generated reports.</div>
+        </section>
+        <section id="view-reports" class="view-section">
+          <h2>Generated Reports</h2>
+          <div id="reports"></div>
+        </section>
+        <section id="view-outputs" class="view-section">
+          <h2>Output Files</h2>
+          <div id="outputs"></div>
+        </section>
+        <section id="view-playbooks" class="view-section">
+          <h2>Playbook Management</h2>
+          <div id="playbooks"></div>
+        </section>
+        <section id="view-subscription" class="view-section">
+          <h2>Subscription</h2>
+          <div id="subscriptionPanel" class="card"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="/assets/dashboard.js"></script>
+</body>
+</html>

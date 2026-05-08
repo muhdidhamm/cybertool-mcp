@@ -1,0 +1,176 @@
+services:
+  unified-threatlens:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: git.abyres.net/mcp/unified-threatlens-server:latest
+    container_name: unified-threatlens-server
+    hostname: unified-threatlens
+    stdin_open: true
+    environment:
+      - MCP_TRANSPORT=stdio
+      - MCP_PORT=8080
+      - AUTO_UPDATE=first
+      - REMOTE_SSH_KEY_PATH=/opt/uts-mcp/data/ssh-keys/mcp_remote_ed25519
+      - MCP_AUDIT_LOG_ENABLED=true
+      - MCP_AUDIT_LOG_PATH=/opt/uts-mcp/logs/mcp_audit.jsonl
+      - MCP_CHAT_HISTORY_DIR=/opt/uts-mcp/logs/chat_sessions
+      - MCP_AUDIT_MAX_FIELD_CHARS=4000
+      - MCP_PLAYBOOKS_DIR=/opt/uts-mcp/data/playbooks
+      - MCP_SUBSCRIPTION_LICENSE_PATH=/opt/uts-mcp/data/subscription.lic
+      - MCP_SUBSCRIPTION_TRUST_MODE=prod
+      - MCP_SUBSCRIPTION_ALLOW_KEY_OVERRIDE=false
+      - MCP_SUBSCRIPTION_LEGACY_LICENSE_COMPAT=false
+      - MCP_SUBSCRIPTION_KEYRING_PATH=/opt/uts-mcp/config/subscription-keys/keys.json
+      - MCP_SUBSCRIPTION_EXPIRY_WARNING_DAYS=14
+      - MCP_DASHBOARD_ENABLED=true
+      - MCP_DASHBOARD_BACKEND=fastapi
+      - MCP_DASHBOARD_HOST=0.0.0.0
+      - MCP_DASHBOARD_PORT=8090
+      - MCP_DASHBOARD_USERNAME=secops
+      - MCP_DASHBOARD_PASSWORD=secops
+      - MCP_DASHBOARD_PASSWORD_HASH=pbkdf2_sha256$200000$6c9c3b64a42fab164b52716e81835335$4fa83944d1df1ddbca8b815ea9601f0d6a9f1ce3048186a73b073354163bfcc7
+      - MCP_DASHBOARD_LOGIN_MAX_ATTEMPTS=5
+      - MCP_DASHBOARD_LOGIN_WINDOW_SECONDS=300
+      - MCP_DASHBOARD_LOGIN_LOCKOUT_SECONDS=900
+      - MCP_DASHBOARD_COOKIE_SECURE=false
+      - TIMEZONE=Asia/Kuala_Lumpur
+      - TZ=Asia/Kuala_Lumpur
+    volumes:
+      - unified-threatlens-output:/opt/uts-mcp/output
+      - unified-threatlens-logs:/opt/uts-mcp/logs
+      - unified-threatlens-data:/opt/uts-mcp/data
+      - unified-threatlens-reports:/opt/uts-mcp/reports
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    ports:
+      - "8090:8090"
+    networks:
+      - unified-threatlens-net
+    restart: unless-stopped
+
+  # Optional: HTTP transport mode for remote access
+  unified-threatlens-stream:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: git.abyres.net/mcp/unified-threatlens-server:latest
+    container_name: unified-threatlens-stream
+    hostname: unified-threatlens-stream
+    environment:
+      - MCP_TRANSPORT=streamable-http
+      - MCP_PORT=8080
+      - AUTO_UPDATE=first
+      - REMOTE_SSH_KEY_PATH=/opt/uts-mcp/data/ssh-keys/mcp_remote_ed25519
+      - MCP_AUDIT_LOG_ENABLED=true
+      - MCP_AUDIT_LOG_PATH=/opt/uts-mcp/logs/mcp_audit.jsonl
+      - MCP_CHAT_HISTORY_DIR=/opt/uts-mcp/logs/chat_sessions
+      - MCP_AUDIT_MAX_FIELD_CHARS=4000
+      - MCP_PLAYBOOKS_DIR=/opt/uts-mcp/data/playbooks
+      - MCP_SUBSCRIPTION_LICENSE_PATH=/opt/uts-mcp/data/subscription.lic
+      - MCP_SUBSCRIPTION_TRUST_MODE=prod
+      - MCP_SUBSCRIPTION_ALLOW_KEY_OVERRIDE=false
+      - MCP_SUBSCRIPTION_LEGACY_LICENSE_COMPAT=false
+      - MCP_SUBSCRIPTION_KEYRING_PATH=/opt/uts-mcp/config/subscription-keys/keys.json
+      - MCP_SUBSCRIPTION_EXPIRY_WARNING_DAYS=14
+      - MCP_DASHBOARD_ENABLED=true
+      - MCP_DASHBOARD_BACKEND=fastapi
+      - MCP_DASHBOARD_HOST=0.0.0.0
+      - MCP_DASHBOARD_PORT=8090
+      - MCP_DASHBOARD_AUTH_TOKEN=F-WGtCLuolLGl4-CAwl5NRCq99drfuy-d06ULSG6n-0
+      - MCP_DASHBOARD_USERNAME=secops
+      - MCP_DASHBOARD_PASSWORD=secops
+      - MCP_DASHBOARD_PASSWORD_HASH=
+      - MCP_DASHBOARD_LOGIN_MAX_ATTEMPTS=5
+      - MCP_DASHBOARD_LOGIN_WINDOW_SECONDS=300
+      - MCP_DASHBOARD_LOGIN_LOCKOUT_SECONDS=900
+      - MCP_DASHBOARD_COOKIE_SECURE=false
+      - TIMEZONE=Asia/Kuala_Lumpur
+      - TZ=Asia/Kuala_Lumpur
+    ports:
+      - "8080:8080"
+      - "8091:8090"
+    volumes:
+      - unified-threatlens-output:/opt/uts-mcp/output
+      - unified-threatlens-logs:/opt/uts-mcp/logs
+      - unified-threatlens-data:/opt/uts-mcp/data
+      - unified-threatlens-reports:/opt/uts-mcp/reports
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    networks:
+      - unified-threatlens-net
+    restart: unless-stopped
+    profiles:
+      - http
+
+  # Dashboard-only test profile using shared persistent volumes
+  unified-threatlens-dashboard-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard-test
+    image: unified-threatlens-dashboard-test:local
+    container_name: unified-threatlens-dashboard-test
+    hostname: unified-threatlens-dashboard-test
+    stdin_open: true
+    environment:
+      - MCP_TRANSPORT=stdio
+      - MCP_PORT=8080
+      - AUTO_UPDATE=never
+      - REMOTE_SSH_KEY_PATH=/opt/uts-mcp/data/ssh-keys/mcp_remote_ed25519
+      - MCP_AUDIT_LOG_ENABLED=true
+      - MCP_AUDIT_LOG_PATH=/opt/uts-mcp/logs/mcp_audit.jsonl
+      - MCP_CHAT_HISTORY_DIR=/opt/uts-mcp/logs/chat_sessions
+      - MCP_AUDIT_MAX_FIELD_CHARS=4000
+      - MCP_PLAYBOOKS_DIR=/opt/uts-mcp/data/playbooks
+      - MCP_SUBSCRIPTION_LICENSE_PATH=/opt/uts-mcp/data/subscription.lic
+      - MCP_SUBSCRIPTION_TRUST_MODE=prod
+      - MCP_SUBSCRIPTION_ALLOW_KEY_OVERRIDE=false
+      - MCP_SUBSCRIPTION_LEGACY_LICENSE_COMPAT=false
+      - MCP_SUBSCRIPTION_KEYRING_PATH=/opt/uts-mcp/config/subscription-keys/keys.json
+      - MCP_SUBSCRIPTION_EXPIRY_WARNING_DAYS=14
+      - MCP_DASHBOARD_ENABLED=true
+      - MCP_DASHBOARD_BACKEND=fastapi
+      - MCP_DASHBOARD_HOST=0.0.0.0
+      - MCP_DASHBOARD_PORT=8090
+      - MCP_DASHBOARD_USERNAME=secops
+      - MCP_DASHBOARD_PASSWORD=secops
+      - MCP_DASHBOARD_PASSWORD_HASH=
+      - MCP_DASHBOARD_LOGIN_MAX_ATTEMPTS=5
+      - MCP_DASHBOARD_LOGIN_WINDOW_SECONDS=300
+      - MCP_DASHBOARD_LOGIN_LOCKOUT_SECONDS=900
+      - MCP_DASHBOARD_COOKIE_SECURE=false
+      - TIMEZONE=Asia/Kuala_Lumpur
+      - TZ=Asia/Kuala_Lumpur
+    ports:
+      - "8092:8090"
+    volumes:
+      - ./:/opt/uts-mcp
+      - unified-threatlens-output:/opt/uts-mcp/output
+      - unified-threatlens-logs:/opt/uts-mcp/logs
+      - unified-threatlens-data:/opt/uts-mcp/data
+      - unified-threatlens-reports:/opt/uts-mcp/reports
+    networks:
+      - unified-threatlens-net
+    restart: unless-stopped
+    profiles:
+      - dash-test
+
+volumes:
+  unified-threatlens-output:
+    name: unified-threatlens-output
+    external: true
+  unified-threatlens-logs:
+    name: unified-threatlens-logs
+    external: true
+  unified-threatlens-data:
+    name: unified-threatlens-data
+    external: true
+  unified-threatlens-reports:
+    name: unified-threatlens-reports
+    external: true
+
+networks:
+  unified-threatlens-net:
+    driver: bridge

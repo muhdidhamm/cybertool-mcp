@@ -1,0 +1,70 @@
+metadata:
+  name: webapp_authenticated_deep_scan
+  description: Authenticated web application scan workflow using provided credentials/session context.
+  tags: [web, pentest, authenticated]
+  owner: secops
+  source: example
+  updated_at: "2026-04-19T00:00:00Z"
+  version: 1
+inputs:
+  target: ""
+  extra: {}
+steps:
+  - id: login_workflow_probe
+    tool: curl_request
+    args:
+      url: "{{target}}{{login_path}}"
+      method: "POST"
+      headers: "Content-Type: application/x-www-form-urlencoded\nUser-Agent: ThreatLensPlaybook"
+      data: "username={{username}}&password={{password}}"
+      follow_redirects: true
+      timeout: 30
+    depends_on: []
+    retries: 0
+    timeout_seconds: 60
+    on_failure: continue
+  - id: authenticated_content_discovery
+    tool: ffuf_fuzz
+    args:
+      url: "{{target}}{{auth_base_path}}/FUZZ"
+      method: "GET"
+      headers: "Cookie: {{session_cookie}}; X-Requested-With: XMLHttpRequest"
+      match_code: "200,204,301,302,307,401,403,405"
+      threads: 40
+      timeout: 420
+    depends_on: [login_workflow_probe]
+    retries: 0
+    timeout_seconds: 480
+    on_failure: continue
+  - id: authenticated_nuclei
+    tool: nuclei_scan
+    args:
+      target: "{{target}}{{auth_base_path}}"
+      severity: "critical,high,medium"
+      tags: "auth,sqli,xss,rce,cve,misconfig"
+      extra_args: "-H Cookie: {{session_cookie}}"
+      timeout: 720
+    depends_on: [authenticated_content_discovery]
+    retries: 0
+    timeout_seconds: 900
+    on_failure: continue
+  - id: sqli_on_authenticated_endpoint
+    tool: sqlmap_scan
+    args:
+      url: "{{target}}{{sqli_test_path}}"
+      method: "GET"
+      level: 3
+      risk: 2
+      extra_args: "--cookie={{session_cookie}}"
+      timeout: 900
+    depends_on: [authenticated_nuclei]
+    retries: 0
+    timeout_seconds: 1020
+    on_failure: continue
+retry_policy:
+  max_retries: 1
+guardrails:
+  require_target: true
+  requires_variables: ["username", "password", "login_path", "auth_base_path", "session_cookie", "sqli_test_path"]
+output_contract:
+  artifacts: [report_paths, path, report_file]
