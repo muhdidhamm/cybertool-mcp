@@ -298,7 +298,7 @@ def _install_tool_audit_hook(mcp_instance: FastMCP) -> None:
     mcp_instance.tool = audited_tool
 
 mcp = FastMCP(
-    "unified-threatlens",
+    "cybertool-mcp",
     instructions=(
         "You are connected to Unified TheartLens a Cyber Operations Linux security toolkit via MCP. "
         "You have access to 279+ penetration testing and security tools spanning 21 categories: "
@@ -339,10 +339,10 @@ mcp = FastMCP(
 )
 
 _install_tool_audit_hook(mcp)
-write_audit_event("server.start", {"service": "unified-threatlens"})
+write_audit_event("server.start", {"service": "cybertool-mcp"})
 if os.environ.get("MCP_DASHBOARD_ENABLED", "false").strip().lower() in {"1", "true", "yes", "on"}:
     start_dashboard_server(mcp)
-    write_audit_event("dashboard.start", {"service": "unified-threatlens-dashboard"})
+    write_audit_event("dashboard.start", {"service": "cybertool-mcp-dashboard"})
 
 from tools import register_all_tools  # noqa: E402
 

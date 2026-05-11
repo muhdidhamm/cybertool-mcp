@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CONTAINER_NAME="unified-threatlens-stream"
-IMAGE="git.abyres.net/mcp/unified-threatlens-server:latest"
+CONTAINER_NAME="cybertool-mcp-stream"
+IMAGE="github.com/mcp/cybertool-mcp-server:latest"
 
 if docker ps -aq --filter "name=^${CONTAINER_NAME}$" | grep -q .; then
   echo "Removing existing container: ${CONTAINER_NAME}"
@@ -18,10 +18,10 @@ CONTAINER_ID="$(
     --cap-add NET_ADMIN \
     -p 8080:8080 \
     -p 8091:8090 \
-    -v unified-threatlens-output:/opt/uts-mcp/output \
-    -v unified-threatlens-logs:/opt/uts-mcp/logs \
-    -v unified-threatlens-data:/opt/uts-mcp/data \
-    -v unified-threatlens-reports:/opt/uts-mcp/reports \
+    -v cybertool-mcp-output:/opt/uts-mcp/output \
+    -v cybertool-mcp-logs:/opt/uts-mcp/logs \
+    -v cybertool-mcp-data:/opt/uts-mcp/data \
+    -v cybertool-mcp-reports:/opt/uts-mcp/reports \
     -e MCP_TRANSPORT=streamable-http \
     -e MCP_PORT=8080 \
     -e AUTO_UPDATE=first \

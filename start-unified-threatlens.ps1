@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
-$containerName = "unified-threatlens-stream"
-$image = "git.abyres.net/mcp/unified-threatlens-server:latest"
+$containerName = "cybertool-mcp-stream"
+$image = "github.com/mcp/cybertool-mcp-server:latest"
 
 $envArgs = @(
     "-e", "MCP_TRANSPORT=streamable-http",
@@ -44,10 +44,10 @@ $argsList = @(
     "--cap-add", "NET_ADMIN",
     "-p", "8080:8080",
     "-p", "8091:8090",
-    "-v", "unified-threatlens-output:/opt/uts-mcp/output",
-    "-v", "unified-threatlens-logs:/opt/uts-mcp/logs",
-    "-v", "unified-threatlens-data:/opt/uts-mcp/data",
-    "-v", "unified-threatlens-reports:/opt/uts-mcp/reports"
+    "-v", "cybertool-mcp-output:/opt/uts-mcp/output",
+    "-v", "cybertool-mcp-logs:/opt/uts-mcp/logs",
+    "-v", "cybertool-mcp-data:/opt/uts-mcp/data",
+    "-v", "cybertool-mcp-reports:/opt/uts-mcp/reports"
 ) + $envArgs + @($image)
 
 $existing = docker ps -aq --filter "name=^${containerName}$"

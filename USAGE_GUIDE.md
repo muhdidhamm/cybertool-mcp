@@ -63,10 +63,10 @@ Use this table when disk usage suddenly spikes and you need the fastest path to 
 Before building or running the container, create the persistent volumes. These store scan output, logs, reports, and tool databases so they survive container restarts.
 
 ```bash
-docker volume create unified-threatlens-output
-docker volume create unified-threatlens-logs
-docker volume create unified-threatlens-data
-docker volume create unified-threatlens-reports
+docker volume create cybertool-mcp-output
+docker volume create cybertool-mcp-logs
+docker volume create cybertool-mcp-data
+docker volume create cybertool-mcp-reports
 ```
 
 ### 2. Build the Docker Image
@@ -100,7 +100,7 @@ Use this quick guide to pick the right MCP transport mode:
 | Transport | Best For | How It Runs | Claude Desktop Config |
 |---|---|---|---|
 | `stdio` | Default local desktop usage | Claude starts a container on demand using `docker run -i` | `command` + `args` |
-| `streamable-http` | Persistent endpoint, remote/multi-client access | Run the `unified-threatlens-stream` Docker Compose service | `command: npx`, `args: [\"-y\", \"mcp-remote@0.1.38\", \"http://localhost:8080/mcp\"]` |
+| `streamable-http` | Persistent endpoint, remote/multi-client access | Run the `cybertool-mcp-stream` Docker Compose service | `command: npx`, `args: [\"-y\", \"mcp-remote@0.1.38\", \"http://localhost:8080/mcp\"]` |
 
 Recommended:
 - Use `stdio` for most single-user local workflows.
@@ -110,12 +110,12 @@ Recommended:
 Start HTTP transport service:
 
 ```bash
-docker compose --profile http up -d unified-threatlens-stream
+docker compose --profile http up -d cybertool-mcp-stream
 ```
 
 ### 4. Start Using
 
-Open a new conversation in Claude Desktop. You should see the **unified-threatlens** tools listed under the hammer icon.
+Open a new conversation in Claude Desktop. You should see the **cybertool-mcp** tools listed under the hammer icon.
 
 You don't need to remember tool names. Just describe what you want in plain English and Claude will select the appropriate tool(s).
 
@@ -152,8 +152,8 @@ If Claude shows `Tool result could not be submitted`, use this quick flow:
 1. Confirm only one active Unified ThreatLens MCP entry exists in `claude_desktop_config.json`.
 2. For `streamable-http`, pin bridge args to `mcp-remote@0.1.38` and use Node.js LTS.
 3. Check stream container health:
-   - `docker ps --filter "name=unified-threatlens-stream"`
-   - `docker logs --tail 50 unified-threatlens-stream`
+   - `docker ps --filter "name=cybertool-mcp-stream"`
+   - `docker logs --tail 50 cybertool-mcp-stream`
 4. Run `mcp_health_check(nonce="diag-1")`, then `start_session(...)`.
 5. Verify `/opt/uts-mcp/logs/mcp_audit.jsonl` contains matching `tool.invoke`/`tool.result` (same `invocation_id`) for the same time window.
 6. Run `end_session(session_id=..., chat_session_id=...)` so the server finalizes chat-linked reports into the session report path.
@@ -203,7 +203,7 @@ Behavior:
 
 Recovery:
 - Pull latest code and rebuild image: `docker compose build`
-- Validate quickly with dashboard test profile: `docker compose --profile dash-test up -d unified-threatlens-dashboard-test`
+- Validate quickly with dashboard test profile: `docker compose --profile dash-test up -d cybertool-mcp-dashboard-test`
 - Open `http://localhost:8092` to confirm UI assets load
 - Optional fallback: set `MCP_DASHBOARD_BACKEND=fastapi`
 
@@ -1258,13 +1258,13 @@ Run a custom command: "cat /etc/passwd" inside the Unified ThreatLens container
 
 ## 19. Database & Pattern Updates
 
-Many security tools rely on up-to-date databases, signatures, and vulnerability templates to be effective. The Unified ThreatLens MCP server stores all tool databases on a **persistent Docker volume** (`unified-threatlens-data`), so updates survive container restarts and image rebuilds.
+Many security tools rely on up-to-date databases, signatures, and vulnerability templates to be effective. The Unified ThreatLens MCP server stores all tool databases on a **persistent Docker volume** (`cybertool-mcp-data`), so updates survive container restarts and image rebuilds.
 
 ### How Persistence Works
 
 | Component | What it stores | Persistent path |
 |---|---|---|
-| **Docker volume** `unified-threatlens-data` | All tool databases | `/opt/uts-mcp/data/` |
+| **Docker volume** `cybertool-mcp-data` | All tool databases | `/opt/uts-mcp/data/` |
 | **Entrypoint auto-update** | Runs full update on first boot | Controlled by `AUTO_UPDATE` env var |
 | **Symlinks** | Point tools to persistent data | Set up automatically at container start |
 

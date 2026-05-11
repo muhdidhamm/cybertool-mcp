@@ -10,15 +10,15 @@ echo "================================================="
 echo ""
 
 echo "[1/3] Building Docker image (this will take 10-20 minutes on first run)..."
-docker build -t git.abyres.net/mcp/unified-threatlens-server:latest .
+docker build -t github.com/mcp/cybertool-mcp-server:latest .
 
 echo ""
 echo "[2/3] Verifying image..."
-docker images git.abyres.net/mcp/unified-threatlens-server:latest
+docker images github.com/mcp/cybertool-mcp-server:latest
 
 echo ""
 echo "[3/3] Testing quick startup..."
-docker run --rm git.abyres.net/mcp/unified-threatlens-server:latest bash -c \
+docker run --rm github.com/mcp/cybertool-mcp-server:latest bash -c \
     "python3 -c 'from tools import register_all_tools; print(\"All tool modules loaded OK\")'"
 
 echo ""
@@ -32,5 +32,5 @@ echo "     macOS:  ~/Library/Application Support/Claude/claude_desktop_config.js
 echo "     Linux:  ~/.config/Claude/claude_desktop_config.json"
 echo "     Windows: %APPDATA%\\Claude\\claude_desktop_config.json"
 echo "  2. Restart Claude Desktop"
-echo "  3. The unified-threatlens tools should appear in Claude Desktop"
+echo "  3. The cybertool-mcp tools should appear in Claude Desktop"
 echo ""

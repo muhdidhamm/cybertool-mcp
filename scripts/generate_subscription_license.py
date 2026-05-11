@@ -44,7 +44,7 @@ def main() -> int:
     parser.add_argument("--end-date", required=True, help="Subscription end date (YYYY-MM-DD or ISO-8601)")
     parser.add_argument("--private-key", required=True, help="Path to PEM private key used for signing")
     parser.add_argument("--output", default="subscription.lic", help="Output license file path")
-    parser.add_argument("--issuer-id", default="unified-threatlens", help="Issuer identifier")
+    parser.add_argument("--issuer-id", default="cybertool-mcp", help="Issuer identifier")
     parser.add_argument("--key-id", default="vendor-default-2026", help="Issuer key identifier")
     parser.add_argument(
         "--issued-at",

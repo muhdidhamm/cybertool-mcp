@@ -74,7 +74,7 @@ class SubscriptionTestCase(unittest.TestCase):
                 {
                     "keys": [
                         {
-                            "issuer_id": "unified-threatlens",
+                            "issuer_id": "cybertool-mcp",
                             "key_id": "vendor-default-2026",
                             "public_key_path": self.public_key_path,
                             "fingerprint_sha256": self.public_key_fingerprint,
@@ -128,7 +128,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=1)),
             "subscription_end_date": str(today + timedelta(days=30)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
         }
         self._write_license(payload)
@@ -144,7 +144,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=20)),
             "subscription_end_date": str(today - timedelta(days=1)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
         }
         self._write_license(payload)
@@ -166,7 +166,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=1)),
             "subscription_end_date": str(today + timedelta(days=3)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
         }
         self._write_license(payload, tamper_signature=True)
@@ -181,7 +181,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=1)),
             "subscription_end_date": str(today + timedelta(days=3)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
             "plan": "gold",
         }
@@ -197,7 +197,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=1)),
             "subscription_end_date": str(today + timedelta(days=3)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
         }
         signature = base64.b64encode(self.private_key.sign(_canonical_payload_bytes(payload))).decode("ascii")
@@ -239,7 +239,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=1)),
             "subscription_end_date": str(today + timedelta(days=5)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
         }
         signature = base64.b64encode(self.private_key.sign(_canonical_payload_bytes(payload))).decode("ascii")
@@ -281,7 +281,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=1)),
             "subscription_end_date": str(today + timedelta(days=5)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
         }
         signature = base64.b64encode(override_private.sign(_canonical_payload_bytes(payload))).decode("ascii")
@@ -334,7 +334,7 @@ class SubscriptionTestCase(unittest.TestCase):
                 {
                     "keys": [
                         {
-                            "issuer_id": "unified-threatlens",
+                            "issuer_id": "cybertool-mcp",
                             "key_id": "vendor-default-2026",
                             "public_key_path": self.public_key_path,
                             "fingerprint_sha256": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
@@ -349,7 +349,7 @@ class SubscriptionTestCase(unittest.TestCase):
             "subscription_start_date": str(today - timedelta(days=1)),
             "subscription_end_date": str(today + timedelta(days=3)),
             "issued_at": datetime.now(timezone.utc).isoformat(),
-            "issuer_id": "unified-threatlens",
+            "issuer_id": "cybertool-mcp",
             "key_id": "vendor-default-2026",
         }
         self._write_license(payload)
@@ -390,7 +390,7 @@ class SubscriptionTestCase(unittest.TestCase):
                 "subscription_start_date": str(today - timedelta(days=1)),
                 "subscription_end_date": str(today + timedelta(days=7)),
                 "issued_at": datetime.now(timezone.utc).isoformat(),
-                "issuer_id": "unified-threatlens",
+                "issuer_id": "cybertool-mcp",
                 "key_id": "vendor-default-2026",
             }
             signature = base64.b64encode(self.private_key.sign(_canonical_payload_bytes(doc_payload))).decode("ascii")

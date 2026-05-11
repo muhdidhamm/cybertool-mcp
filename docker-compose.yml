@@ -1,11 +1,11 @@
 services:
-  unified-threatlens:
+  cybertool-mcp:
     build:
       context: .
       dockerfile: Dockerfile
-    image: git.abyres.net/mcp/unified-threatlens-server:latest
-    container_name: unified-threatlens-server
-    hostname: unified-threatlens
+    image: github.com/mcp/cybertool-mcp-server:latest
+    container_name: cybertool-mcp-server
+    hostname: cybertool-mcp
     stdin_open: true
     environment:
       - MCP_TRANSPORT=stdio
@@ -37,27 +37,27 @@ services:
       - TIMEZONE=Asia/Kuala_Lumpur
       - TZ=Asia/Kuala_Lumpur
     volumes:
-      - unified-threatlens-output:/opt/uts-mcp/output
-      - unified-threatlens-logs:/opt/uts-mcp/logs
-      - unified-threatlens-data:/opt/uts-mcp/data
-      - unified-threatlens-reports:/opt/uts-mcp/reports
+      - cybertool-mcp-output:/opt/uts-mcp/output
+      - cybertool-mcp-logs:/opt/uts-mcp/logs
+      - cybertool-mcp-data:/opt/uts-mcp/data
+      - cybertool-mcp-reports:/opt/uts-mcp/reports
     cap_add:
       - NET_RAW
       - NET_ADMIN
     ports:
       - "8090:8090"
     networks:
-      - unified-threatlens-net
+      - cybertool-mcp-net
     restart: unless-stopped
 
   # Optional: HTTP transport mode for remote access
-  unified-threatlens-stream:
+  cybertool-mcp-stream:
     build:
       context: .
       dockerfile: Dockerfile
-    image: git.abyres.net/mcp/unified-threatlens-server:latest
-    container_name: unified-threatlens-stream
-    hostname: unified-threatlens-stream
+    image: github.com/mcp/cybertool-mcp-server:latest
+    container_name: cybertool-mcp-stream
+    hostname: cybertool-mcp-stream
     environment:
       - MCP_TRANSPORT=streamable-http
       - MCP_PORT=8080
@@ -92,27 +92,27 @@ services:
       - "8080:8080"
       - "8091:8090"
     volumes:
-      - unified-threatlens-output:/opt/uts-mcp/output
-      - unified-threatlens-logs:/opt/uts-mcp/logs
-      - unified-threatlens-data:/opt/uts-mcp/data
-      - unified-threatlens-reports:/opt/uts-mcp/reports
+      - cybertool-mcp-output:/opt/uts-mcp/output
+      - cybertool-mcp-logs:/opt/uts-mcp/logs
+      - cybertool-mcp-data:/opt/uts-mcp/data
+      - cybertool-mcp-reports:/opt/uts-mcp/reports
     cap_add:
       - NET_RAW
       - NET_ADMIN
     networks:
-      - unified-threatlens-net
+      - cybertool-mcp-net
     restart: unless-stopped
     profiles:
       - http
 
   # Dashboard-only test profile using shared persistent volumes
-  unified-threatlens-dashboard-test:
+  cybertool-mcp-dashboard-test:
     build:
       context: .
       dockerfile: Dockerfile.dashboard-test
-    image: unified-threatlens-dashboard-test:local
-    container_name: unified-threatlens-dashboard-test
-    hostname: unified-threatlens-dashboard-test
+    image: cybertool-mcp-dashboard-test:local
+    container_name: cybertool-mcp-dashboard-test
+    hostname: cybertool-mcp-dashboard-test
     stdin_open: true
     environment:
       - MCP_TRANSPORT=stdio
@@ -147,30 +147,30 @@ services:
       - "8092:8090"
     volumes:
       - ./:/opt/uts-mcp
-      - unified-threatlens-output:/opt/uts-mcp/output
-      - unified-threatlens-logs:/opt/uts-mcp/logs
-      - unified-threatlens-data:/opt/uts-mcp/data
-      - unified-threatlens-reports:/opt/uts-mcp/reports
+      - cybertool-mcp-output:/opt/uts-mcp/output
+      - cybertool-mcp-logs:/opt/uts-mcp/logs
+      - cybertool-mcp-data:/opt/uts-mcp/data
+      - cybertool-mcp-reports:/opt/uts-mcp/reports
     networks:
-      - unified-threatlens-net
+      - cybertool-mcp-net
     restart: unless-stopped
     profiles:
       - dash-test
 
 volumes:
-  unified-threatlens-output:
-    name: unified-threatlens-output
+  cybertool-mcp-output:
+    name: cybertool-mcp-output
     external: true
-  unified-threatlens-logs:
-    name: unified-threatlens-logs
+  cybertool-mcp-logs:
+    name: cybertool-mcp-logs
     external: true
-  unified-threatlens-data:
-    name: unified-threatlens-data
+  cybertool-mcp-data:
+    name: cybertool-mcp-data
     external: true
-  unified-threatlens-reports:
-    name: unified-threatlens-reports
+  cybertool-mcp-reports:
+    name: cybertool-mcp-reports
     external: true
 
 networks:
-  unified-threatlens-net:
+  cybertool-mcp-net:
     driver: bridge

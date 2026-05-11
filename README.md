@@ -5,7 +5,7 @@ A comprehensive MCP (Model Context Protocol) server that gives Claude Desktop ac
 ## Architecture
 
 ```
-Claude Desktop  ──stdio──►  Docker Container (unified-threatlens-server)
+Claude Desktop  ──stdio──►  Docker Container (cybertool-mcp-server)
                                 │
                                 ├── MCP Server (FastMCP / Python)
                                 │       │
@@ -40,20 +40,20 @@ Claude Desktop  ──stdio──►  Docker Container (unified-threatlens-serve
 
 **Windows (PowerShell):**
 ```powershell
-cd d:\projects\MCP\unified-threatlens
+cd d:\projects\MCP\cybertool-mcp
 .\build.ps1
 ```
 
 **Linux / macOS:**
 ```bash
-cd /path/to/unified-threatlens
+cd /path/to/cybertool-mcp
 chmod +x build.sh
 ./build.sh
 ```
 
 **Or manually:**
 ```bash
-docker build -t git.abyres.net/mcp/unified-threatlens-server:latest .
+docker build -t github.com/mcp/cybertool-mcp-server:latest .
 ```
 
 > The first build takes **20-40 minutes** as it installs all metapackages and security tools. Subsequent builds use Docker cache.
@@ -73,7 +73,7 @@ Add or merge this configuration:
 ```json
 {
   "mcpServers": {
-    "unified-threatlens": {
+    "cybertool-mcp": {
       "command": "docker",
       "args": [
         "run",
@@ -81,11 +81,11 @@ Add or merge this configuration:
         "--rm",
         "--cap-add", "NET_RAW",
         "--cap-add", "NET_ADMIN",
-        "-v", "unified-threatlens-output:/opt/uts-mcp/output",
-        "-v", "unified-threatlens-data:/opt/uts-mcp/data",
-        "-v", "unified-threatlens-reports:/opt/uts-mcp/reports",
-        "-v", "unified-threatlens-logs:/opt/uts-mcp/logs",
-        "git.abyres.net/mcp/unified-threatlens-server:latest"
+        "-v", "cybertool-mcp-output:/opt/uts-mcp/output",
+        "-v", "cybertool-mcp-data:/opt/uts-mcp/data",
+        "-v", "cybertool-mcp-reports:/opt/uts-mcp/reports",
+        "-v", "cybertool-mcp-logs:/opt/uts-mcp/logs",
+        "github.com/mcp/cybertool-mcp-server:latest"
       ],
       "env": {
         "AUTO_UPDATE": "first"
@@ -100,7 +100,7 @@ For streamable HTTP mode in Claude Desktop, use a single bridge entry and pin `m
 ```json
 {
   "mcpServers": {
-    "unified-threatlens": {
+    "cybertool-mcp": {
       "command": "npx",
       "args": [
         "-y",
@@ -117,15 +117,15 @@ Node.js LTS is recommended for bridge stability (Node 20+).
 Before using this config, create persistent Docker volumes:
 
 ```bash
-docker volume create unified-threatlens-output
-docker volume create unified-threatlens-logs
-docker volume create unified-threatlens-data
-docker volume create unified-threatlens-reports
+docker volume create cybertool-mcp-output
+docker volume create cybertool-mcp-logs
+docker volume create cybertool-mcp-data
+docker volume create cybertool-mcp-reports
 ```
 
 ### 3. Restart Claude Desktop
 
-Completely quit and relaunch Claude Desktop. The **unified-threatlens** tools should appear in the tools menu (hammer icon).
+Completely quit and relaunch Claude Desktop. The **cybertool-mcp** tools should appear in the tools menu (hammer icon).
 
 ## Incident Response Cheatsheet
 
@@ -234,8 +234,8 @@ Enable with environment variables:
 Timezone precedence for the server is: `TIMEZONE` -> `TZ` -> `Asia/Kuala_Lumpur`.
 
 Docker Compose defaults in this repo expose:
-- `http://localhost:8090` for `unified-threatlens-stream`
-- `http://localhost:8091` for `unified-threatlens-dashboard`
+- `http://localhost:8090` for `cybertool-mcp-stream`
+- `http://localhost:8091` for `cybertool-mcp-dashboard`
 
 When `MCP_DASHBOARD_AUTH_TOKEN` is set, pass it as:
 - Header: `Authorization: Bearer <token>`
@@ -271,7 +271,7 @@ python3 scripts/generate_dashboard_env.py --username secops --output .env.dashbo
 Use it with Docker Compose:
 
 ```bash
-docker compose --env-file .env.dashboard up -d unified-threatlens
+docker compose --env-file .env.dashboard up -d cybertool-mcp
 ```
 
 ### Subscription Control
@@ -293,7 +293,7 @@ python3 scripts/generate_subscription_license.py \
   --subscriber-name "Acme Corp" \
   --start-date "2026-04-01" \
   --end-date "2026-12-31" \
-  --issuer-id "unified-threatlens" \
+  --issuer-id "cybertool-mcp" \
   --key-id "vendor-default-2026" \
   --private-key /path/to/subscription-private.pem \
   --output /tmp/subscription.lic
@@ -406,16 +406,16 @@ It uses a slim Python image, bind-mounts the local source tree, and reuses the s
 
 ```bash
 # build and start lightweight dashboard test container
-docker compose --profile dash-test up -d unified-threatlens-dashboard-test
+docker compose --profile dash-test up -d cybertool-mcp-dashboard-test
 
 # open dashboard
 # http://localhost:8092
 
 # stop test container
-docker compose --profile dash-test stop unified-threatlens-dashboard-test
+docker compose --profile dash-test stop cybertool-mcp-dashboard-test
 
 # remove test container
-docker compose --profile dash-test rm -sf unified-threatlens-dashboard-test
+docker compose --profile dash-test rm -sf cybertool-mcp-dashboard-test
 ```
 
 Default test audit log path:
@@ -836,7 +836,7 @@ Pre-installed Python libraries for scripting:
 For remote access or multi-client setups, run with HTTP transport:
 
 ```bash
-docker compose --profile http up -d unified-threatlens-stream
+docker compose --profile http up -d cybertool-mcp-stream
 ```
 
 This exposes the MCP server on port 8080 with streamable-http transport at:
@@ -850,7 +850,7 @@ Use this quick guide to choose the right MCP transport:
 | Transport | Best For | How It Runs | Claude Config |
 |---|---|---|---|
 | `stdio` | Default local desktop usage | Claude starts container per session via `docker run -i` | `command` + `args` |
-| `streamable-http` | Remote access, multi-client, always-on server | Run `unified-threatlens-stream` service with Docker Compose | `npx mcp-remote@0.1.38 http://localhost:8080/mcp` |
+| `streamable-http` | Remote access, multi-client, always-on server | Run `cybertool-mcp-stream` service with Docker Compose | `npx mcp-remote@0.1.38 http://localhost:8080/mcp` |
 
 ### Recommended Default
 
@@ -864,7 +864,7 @@ Use this quick guide to choose the right MCP transport:
 # no separate server process required
 
 # streamable-http mode (run persistent MCP HTTP endpoint)
-docker compose --profile http up -d unified-threatlens-stream
+docker compose --profile http up -d cybertool-mcp-stream
 ```
 
 ## Security Notice
@@ -873,18 +873,18 @@ This toolkit is designed for **authorized security testing only**. Always ensure
 
 ## Troubleshooting
 
-**Claude Desktop doesn't show unified-threatlens tools:**
+**Claude Desktop doesn't show cybertool-mcp tools:**
 1. Verify Docker Desktop is running
-2. Check the image exists: `docker images unified-threatlens-server`
-3. Test manually: `docker run -i --rm git.abyres.net/mcp/unified-threatlens-server:latest`
+2. Check the image exists: `docker images cybertool-mcp-server`
+3. Test manually: `docker run -i --rm github.com/mcp/cybertool-mcp-server:latest`
 4. Check Claude Desktop logs at `%APPDATA%\Claude\logs\` (Windows)
 
 **Claude error: `Tool result could not be submitted`**
 1. Confirm Claude config has only one active Unified ThreatLens entry and, for stream mode, uses `mcp-remote@0.1.38`.
-2. Verify stream service status: `docker ps --filter "name=unified-threatlens-stream"` and check `docker logs --tail 50 unified-threatlens-stream`.
+2. Verify stream service status: `docker ps --filter "name=cybertool-mcp-stream"` and check `docker logs --tail 50 cybertool-mcp-stream`.
 3. Run `mcp_health_check(nonce="diag-1")` followed by `start_session(...)`.
 4. Check audit evidence quickly:
-   - `docker exec unified-threatlens-stream python -c "from pathlib import Path; p=Path('/opt/uts-mcp/logs/mcp_audit.jsonl'); print(p.exists(), p.stat().st_size if p.exists() else 0)"`
+   - `docker exec cybertool-mcp-stream python -c "from pathlib import Path; p=Path('/opt/uts-mcp/logs/mcp_audit.jsonl'); print(p.exists(), p.stat().st_size if p.exists() else 0)"`
    - If matching `tool.result` events exist for the failing time window, treat this as bridge/client lifecycle interruption and retry.
 5. End each completed run with `end_session(session_id=..., chat_session_id=...)` so report finalization runs and only accessible report links appear in dashboard.
 6. For DOCX/PDF/HTML generated outside MCP report tools, upload with `save_binary_report_artifact(...)` instead of text-only `write_file`.
@@ -893,7 +893,7 @@ This toolkit is designed for **authorized security testing only**. Always ensure
 **Build fails:**
 - Ensure Docker Desktop has at least 8 GB memory allocated
 - Check internet connectivity (the build downloads packages from main repos)
-- Try building without cache: `docker build --no-cache -t git.abyres.net/mcp/unified-threatlens-server:latest .`
+- Try building without cache: `docker build --no-cache -t github.com/mcp/cybertool-mcp-server:latest .`
 - The robust installer skips unavailable packages — some tools may not be in current repos
 
 **Tool times out:**

@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$containerName = "unified-threatlens-stream"
+$containerName = "cybertool-mcp-stream"
 
 $existing = docker ps -aq --filter "name=^${containerName}$"
 if (-not $existing) {
