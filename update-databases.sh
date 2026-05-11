@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
-# Unified ThreatLens MCP — Tool Database & Pattern Updater
+# Cybertool MCP — Tool Database & Pattern Updater
 #
 # Updates all tool databases/signatures/templates to latest versions.
 # Data is stored in /opt/uts-mcp/data/ which should be a persistent volume.
@@ -203,7 +203,7 @@ update_all() {
 
 show_status() {
     echo "═══════════════════════════════════════════════════"
-    echo "  Unified ThreatLens — Database Update Status"
+    echo "  Cybertool — Database Update Status"
     echo "═══════════════════════════════════════════════════"
     printf "  %-20s %s\n" "TOOL" "LAST UPDATED"
     echo "  ──────────────────────────────────────────────"

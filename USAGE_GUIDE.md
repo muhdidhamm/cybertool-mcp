@@ -1,6 +1,6 @@
-# Unified ThreatLens MCP Server — Usage Guide
+# Cybertool MCP Server — Usage Guide
 
-This guide shows you how to use Claude Desktop to run every security tool available in your Unified ThreatLens MCP server. Just type natural language prompts — Claude will pick the right tool automatically.
+This guide shows you how to use Claude Desktop to run every security tool available in your Cybertool MCP server. Just type natural language prompts — Claude will pick the right tool automatically.
 
 ---
 
@@ -123,7 +123,7 @@ You don't need to remember tool names. Just describe what you want in plain Engl
 
 ### Timezone configuration
 
-Unified ThreatLens uses these timezone settings for displayed/generated date-time values:
+Cybertool uses these timezone settings for displayed/generated date-time values:
 - `TIMEZONE` (primary)
 - `TZ` (fallback)
 - default: `Asia/Kuala_Lumpur`
@@ -149,7 +149,7 @@ Notes:
 
 If Claude shows `Tool result could not be submitted`, use this quick flow:
 
-1. Confirm only one active Unified ThreatLens MCP entry exists in `claude_desktop_config.json`.
+1. Confirm only one active Cybertool MCP entry exists in `claude_desktop_config.json`.
 2. For `streamable-http`, pin bridge args to `mcp-remote@0.1.38` and use Node.js LTS.
 3. Check stream container health:
    - `docker ps --filter "name=cybertool-mcp-stream"`
@@ -1215,7 +1215,7 @@ Convert the HTML report to PDF
 ### System & File Management
 
 ```
-Show system info for the Unified ThreatLens container — OS, network, disk space
+Show system info for the Cybertool container — OS, network, disk space
 ```
 
 ```
@@ -1251,14 +1251,14 @@ Calculate the network info for 192.168.1.0/24
 ```
 
 ```
-Run a custom command: "cat /etc/passwd" inside the Unified ThreatLens container
+Run a custom command: "cat /etc/passwd" inside the Cybertool container
 ```
 
 ---
 
 ## 19. Database & Pattern Updates
 
-Many security tools rely on up-to-date databases, signatures, and vulnerability templates to be effective. The Unified ThreatLens MCP server stores all tool databases on a **persistent Docker volume** (`cybertool-mcp-data`), so updates survive container restarts and image rebuilds.
+Many security tools rely on up-to-date databases, signatures, and vulnerability templates to be effective. The Cybertool MCP server stores all tool databases on a **persistent Docker volume** (`cybertool-mcp-data`), so updates survive container restarts and image rebuilds.
 
 ### How Persistence Works
 
@@ -1354,7 +1354,7 @@ This ensures you are testing against the latest known vulnerabilities.
 
 ## 20. Post-Quantum Cryptography (PQC) Assessment
 
-As quantum computing advances, classical cryptographic algorithms (RSA, ECDSA, DH, ECDH) will become vulnerable to Shor's algorithm. The Unified ThreatLens MCP server includes dedicated tools to assess your servers' readiness for the post-quantum era.
+As quantum computing advances, classical cryptographic algorithms (RSA, ECDSA, DH, ECDH) will become vulnerable to Shor's algorithm. The Cybertool MCP server includes dedicated tools to assess your servers' readiness for the post-quantum era.
 
 ### Full PQC Readiness Assessment
 
@@ -1731,4 +1731,4 @@ Example AI invocation:
 | Extract hidden data | "Check image.jpg for steganography" |
 | Reverse engineer | "Disassemble and analyze binary.elf" |
 | Generate report | "Create an HTML pentest report with our findings" |
-| Run anything | "Run the command nmap -A 10.0.0.5 in the Unified ThreatLens container" |
+| Run anything | "Run the command nmap -A 10.0.0.5 in the Cybertool container" |

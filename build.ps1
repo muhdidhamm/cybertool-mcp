@@ -1,8 +1,8 @@
-# Unified ThreatLens MCP Server - Build Script for Windows (PowerShell)
+# Cybertool MCP Server - Build Script for Windows (PowerShell)
 # Run: .\build.ps1
 
 Write-Host "=================================================" -ForegroundColor Cyan
-Write-Host "  Unified ThreatLens MCP Server - Docker Build" -ForegroundColor Cyan
+Write-Host "  Cybertool MCP Server - Docker Build" -ForegroundColor Cyan
 Write-Host "=================================================" -ForegroundColor Cyan
 Write-Host ""
 

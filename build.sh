@@ -1,11 +1,11 @@
 #!/bin/bash
-# Unified ThreatLens MCP Server - Build Script for Linux/macOS
+# Cybertool MCP Server - Build Script for Linux/macOS
 # Run: chmod +x build.sh && ./build.sh
 
 set -e
 
 echo "================================================="
-echo "  Unified ThreatLens MCP Server - Docker Build"
+echo "  Cybertool MCP Server - Docker Build"
 echo "================================================="
 echo ""
 

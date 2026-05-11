@@ -104,7 +104,7 @@ def _unauthorized_json() -> JSONResponse:
 
 
 def create_dashboard_app(mcp_instance) -> FastAPI:
-    app = FastAPI(title="Unified ThreatLens Dashboard API", version="1.0.0")
+    app = FastAPI(title="Cybertool Dashboard API", version="1.0.0")
     ensure_playbook_store()
 
     @app.middleware("http")

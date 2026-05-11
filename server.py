@@ -1,4 +1,4 @@
-"""Unified ThreatLens a Cyber Operations Linux MCP Server — exposes 279+ security tools to AI agents via Model Context Protocol."""
+"""Cybertool a Cyber Operations Linux MCP Server — exposes 279+ security tools to AI agents via Model Context Protocol."""
 
 import argparse
 import asyncio
@@ -300,7 +300,7 @@ def _install_tool_audit_hook(mcp_instance: FastMCP) -> None:
 mcp = FastMCP(
     "cybertool-mcp",
     instructions=(
-        "You are connected to Unified TheartLens a Cyber Operations Linux security toolkit via MCP. "
+        "You are connected to Cybertool a Cyber Operations Linux security toolkit via MCP. "
         "You have access to 279+ penetration testing and security tools spanning 21 categories: "
         "Network Recon (Nmap, Masscan, ZMap, hping3), "
         "Web Security (Nikto, SQLMap, Gobuster, ffuf, Feroxbuster, Nuclei, OWASP ZAP, Commix, XSSer, Wapiti, Skipfish — all HTTPS-aware), "
@@ -350,7 +350,7 @@ register_all_tools(mcp)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Unified ThreatLens MCP Server")
+    parser = argparse.ArgumentParser(description="Cybertool MCP Server")
     parser.add_argument(
         "--transport",
         choices=["stdio", "sse", "streamable-http"],

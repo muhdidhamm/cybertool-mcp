@@ -1123,7 +1123,7 @@ def _login_html(error_message: str = "", subscription_status: dict | None = None
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Unified ThreatLens Dashboard Login</title>
+  <title>Cybertool Dashboard Login</title>
   <style>
     body {{ font-family: Arial, sans-serif; background: #0f172a; color: #e2e8f0; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; }}
     .card {{ width: 360px; background:#111827; border:1px solid #334155; border-radius:10px; padding:20px; }}

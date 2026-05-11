@@ -103,7 +103,7 @@ def register_util_tools(mcp):
 
     @mcp.tool()
     async def system_info() -> dict:
-        """Get system information about the Unified ThreatLens container."""
+        """Get system information about the Cybertool MCP container."""
         uname = await run_command(["uname", "-a"], timeout=5)
         ip = await run_command(["ip", "addr", "show"], timeout=5)
         ps = await run_command(["ps", "aux"], timeout=5)
@@ -121,7 +121,7 @@ def register_util_tools(mcp):
         command: str,
         timeout: int = 60,
     ) -> dict:
-        """Execute an arbitrary shell command inside the Unified ThreatLens container.
+        """Execute an arbitrary shell command inside the Cybertool MCP container.
 
         Use this for any tool or command not covered by the specialized tools.
         Commands run as root inside the container.
@@ -251,7 +251,7 @@ def register_util_tools(mcp):
         script: str,
         timeout: int = 60,
     ) -> dict:
-        """Execute a PowerShell command or script inside the Unified ThreatLens container.
+        """Execute a PowerShell command or script inside the Cybertool MCP container.
 
         Args:
             script: PowerShell command or script block.

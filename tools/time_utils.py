@@ -1,4 +1,4 @@
-"""Shared timezone helpers for Unified ThreatLens."""
+"""Shared timezone helpers for Cybertool."""
 
 from __future__ import annotations
 

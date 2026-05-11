@@ -1,6 +1,6 @@
 """Burp Suite integration for automated web vulnerability scanning, crawling, and reporting.
 
-Burp Suite Community in Unified ThreatLens runs headless. This module provides:
+Burp Suite Community in Cybertool runs headless. This module provides:
   - Passive/active crawl + audit via Burp's CLI
   - Proxy-based scanning with mitmproxy as Burp alternative
   - A full automated pipeline: crawl → scan → report
@@ -105,7 +105,7 @@ def register_burpsuite_tools(mcp):
 
         This is the recommended one-stop tool for comprehensive web app testing.
         It combines crawling, active/passive scanning, and produces a professional
-        report through the Unified ThreatLens MCP reporting system.
+        report through the Cybertool MCP reporting system.
 
         Args:
             target: Target URL (e.g. https://target.com).
@@ -195,7 +195,7 @@ def register_burpsuite_tools(mcp):
             "target": target,
             "findings": json.dumps(findings),
             "executive_summary": exec_summary,
-            "tester": "Unified ThreatLens MCP Automated Scanner (Burp Pipeline)",
+            "tester": "Cybertool MCP Automated Scanner (Burp Pipeline)",
             "scope": f"Full web application scan of {target} ({scan_type} mode)",
             "format": report_format,
             "filename": f"burp_assessment_{ts}",
@@ -568,7 +568,7 @@ async def _invoke_create_report(mcp, report_data: dict) -> dict:
             subtitle=f"Security Assessment for {report_data['target']}",
             target=report_data["target"],
             date=now,
-            tester=report_data.get("tester", "Unified ThreatLens MCP"),
+            tester=report_data.get("tester", "Cybertool MCP"),
             scope=report_data.get("scope", ""),
             executive_summary=report_data.get("executive_summary", ""),
             severity_counts=severity_counts,
