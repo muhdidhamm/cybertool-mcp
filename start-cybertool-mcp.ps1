@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $containerName = "cybertool-mcp-stream"
-$image = "github.com/mcp/cybertool-mcp-server:latest"
+$image = "ghcr.io/muhdidhamm/cybertool-mcp-server:latest"
 
 $envArgs = @(
     "-e", "MCP_TRANSPORT=streamable-http",

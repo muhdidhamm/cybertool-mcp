@@ -7,7 +7,7 @@ Write-Host "=================================================" -ForegroundColor 
 Write-Host ""
 
 Write-Host "[1/3] Building Docker image (this will take 10-20 minutes on first run)..." -ForegroundColor Yellow
-docker build -t github.com/mcp/cybertool-mcp-server:latest .
+docker build -t ghcr.io/muhdidhamm/cybertool-mcp-server:latest .
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Docker build failed!" -ForegroundColor Red
@@ -16,11 +16,11 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host ""
 Write-Host "[2/3] Verifying image..." -ForegroundColor Yellow
-docker images github.com/mcp/cybertool-mcp-server:latest
+docker images ghcr.io/muhdidhamm/cybertool-mcp-server:latest
 
 Write-Host ""
 Write-Host "[3/3] Testing quick startup..." -ForegroundColor Yellow
-$testResult = docker run -e AUTO_UPDATE=never --rm github.com/mcp/cybertool-mcp-server:latest bash -c "python3 -c 'from tools import register_all_tools; print(\"All tool modules loaded OK\")'"
+$testResult = docker run -e AUTO_UPDATE=never --rm ghcr.io/muhdidhamm/cybertool-mcp-server:latest bash -c "python3 -c 'from tools import register_all_tools; print(\"All tool modules loaded OK\")'"
 Write-Host $testResult
 
 Write-Host ""

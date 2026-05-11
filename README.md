@@ -53,7 +53,7 @@ chmod +x build.sh
 
 **Or manually:**
 ```bash
-docker build -t github.com/mcp/cybertool-mcp-server:latest .
+docker build -t ghcr.io/muhdidhamm/cybertool-mcp-server:latest .
 ```
 
 > The first build takes **20-40 minutes** as it installs all metapackages and security tools. Subsequent builds use Docker cache.
@@ -85,7 +85,7 @@ Add or merge this configuration:
         "-v", "cybertool-mcp-data:/opt/uts-mcp/data",
         "-v", "cybertool-mcp-reports:/opt/uts-mcp/reports",
         "-v", "cybertool-mcp-logs:/opt/uts-mcp/logs",
-        "github.com/mcp/cybertool-mcp-server:latest"
+        "ghcr.io/muhdidhamm/cybertool-mcp-server:latest"
       ],
       "env": {
         "AUTO_UPDATE": "first"
@@ -876,7 +876,7 @@ This toolkit is designed for **authorized security testing only**. Always ensure
 **Claude Desktop doesn't show cybertool-mcp tools:**
 1. Verify Docker Desktop is running
 2. Check the image exists: `docker images cybertool-mcp-server`
-3. Test manually: `docker run -i --rm github.com/mcp/cybertool-mcp-server:latest`
+3. Test manually: `docker run -i --rm ghcr.io/muhdidhamm/cybertool-mcp-server:latest`
 4. Check Claude Desktop logs at `%APPDATA%\Claude\logs\` (Windows)
 
 **Claude error: `Tool result could not be submitted`**
@@ -893,7 +893,7 @@ This toolkit is designed for **authorized security testing only**. Always ensure
 **Build fails:**
 - Ensure Docker Desktop has at least 8 GB memory allocated
 - Check internet connectivity (the build downloads packages from main repos)
-- Try building without cache: `docker build --no-cache -t github.com/mcp/cybertool-mcp-server:latest .`
+- Try building without cache: `docker build --no-cache -t ghcr.io/muhdidhamm/cybertool-mcp-server:latest .`
 - The robust installer skips unavailable packages — some tools may not be in current repos
 
 **Tool times out:**

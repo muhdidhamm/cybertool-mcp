@@ -10,15 +10,15 @@ echo "================================================="
 echo ""
 
 echo "[1/3] Building Docker image (this will take 10-20 minutes on first run)..."
-docker build -t github.com/mcp/cybertool-mcp-server:latest .
+docker build -t ghcr.io/muhdidhamm/cybertool-mcp-server:latest .
 
 echo ""
 echo "[2/3] Verifying image..."
-docker images github.com/mcp/cybertool-mcp-server:latest
+docker images ghcr.io/muhdidhamm/cybertool-mcp-server:latest
 
 echo ""
 echo "[3/3] Testing quick startup..."
-docker run --rm github.com/mcp/cybertool-mcp-server:latest bash -c \
+docker run --rm ghcr.io/muhdidhamm/cybertool-mcp-server:latest bash -c \
     "python3 -c 'from tools import register_all_tools; print(\"All tool modules loaded OK\")'"
 
 echo ""

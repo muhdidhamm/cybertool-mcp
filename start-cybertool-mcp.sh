@@ -2,7 +2,7 @@
 set -euo pipefail
 
 CONTAINER_NAME="cybertool-mcp-stream"
-IMAGE="github.com/mcp/cybertool-mcp-server:latest"
+IMAGE="ghcr.io/muhdidhamm/cybertool-mcp-server:latest"
 
 if docker ps -aq --filter "name=^${CONTAINER_NAME}$" | grep -q .; then
   echo "Removing existing container: ${CONTAINER_NAME}"

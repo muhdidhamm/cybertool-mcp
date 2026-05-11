@@ -12,7 +12,7 @@
         "-v", "cybertool-mcp-data:/opt/uts-mcp/data",
         "-v", "cybertool-mcp-reports:/opt/uts-mcp/reports",
         "-v", "cybertool-mcp-logs:/opt/uts-mcp/logs",
-        "github.com/mcp/cybertool-mcp-server:latest"
+        "ghcr.io/muhdidhamm/cybertool-mcp-server:latest"
       ],
       "env": {
         "AUTO_UPDATE": "first",

@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: github.com/mcp/cybertool-mcp-server:latest
+    image: ghcr.io/muhdidhamm/cybertool-mcp-server:latest
     container_name: cybertool-mcp-server
     hostname: cybertool-mcp
     stdin_open: true
@@ -55,7 +55,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: github.com/mcp/cybertool-mcp-server:latest
+    image: ghcr.io/muhdidhamm/cybertool-mcp-server:latest
     container_name: cybertool-mcp-stream
     hostname: cybertool-mcp-stream
     environment:
