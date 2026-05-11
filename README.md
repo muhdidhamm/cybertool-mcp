@@ -1,6 +1,6 @@
-# Unified ThreatLens MCP Server
+# Cybertool MCP Server
 
-A comprehensive MCP (Model Context Protocol) server that gives Claude Desktop access to **279+ Unified ThreatLens Linux security tools** running inside a Docker container. Ask Claude to perform penetration testing, vulnerability scanning, network reconnaissance, PQC readiness checks, and disk incident response workflows — all through natural language.
+A comprehensive MCP (Model Context Protocol) server that gives Claude Desktop access to **279+ Cybertool MCP Linux security tools** running inside a Docker container. Ask Claude to perform penetration testing, vulnerability scanning, network reconnaissance, PQC readiness checks, and disk incident response workflows — all through natural language.
 
 ## Architecture
 
@@ -154,7 +154,7 @@ Use this quick map for Linux disk-full incidents.
 
 ## Audit Logging (AI + MCP Tool Activity)
 
-Unified ThreatLens can persist structured audit logs for:
+Cybertool MCP can persist structured audit logs for:
 - MCP tool invocations (tool name + arguments)
 - MCP tool results/errors
 - Underlying command executions (`run_command`) and outputs
@@ -202,7 +202,7 @@ Notes:
 
 ## Web Dashboard (Sessions, Logs, Reports)
 
-Unified ThreatLens includes an optional web dashboard that visualizes:
+Cybertool MCP includes an optional web dashboard that visualizes:
 - Scan AI sessions (derived from `session_id` when provided, otherwise time-window grouped)
 - Full MCP tool execution timeline and results per session
 - Linked generated reports and output files
@@ -276,7 +276,7 @@ docker compose --env-file .env.dashboard up -d cybertool-mcp
 
 ### Subscription Control
 
-Unified ThreatLens supports signed subscription enforcement for MCP tool execution.
+Cybertool MCP supports signed subscription enforcement for MCP tool execution.
 
 - Dashboard features (login, sessions, reports, output files) remain available even when subscription is missing or expired.
 - MCP tool calls are blocked when subscription is missing, invalid, not started, or expired.
@@ -880,7 +880,7 @@ This toolkit is designed for **authorized security testing only**. Always ensure
 4. Check Claude Desktop logs at `%APPDATA%\Claude\logs\` (Windows)
 
 **Claude error: `Tool result could not be submitted`**
-1. Confirm Claude config has only one active Unified ThreatLens entry and, for stream mode, uses `mcp-remote@0.1.38`.
+1. Confirm Claude config has only one active Cybertool MCP entry and, for stream mode, uses `mcp-remote@0.1.38`.
 2. Verify stream service status: `docker ps --filter "name=cybertool-mcp-stream"` and check `docker logs --tail 50 cybertool-mcp-stream`.
 3. Run `mcp_health_check(nonce="diag-1")` followed by `start_session(...)`.
 4. Check audit evidence quickly:
