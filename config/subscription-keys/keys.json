@@ -2,9 +2,9 @@
   "keys": [
     {
       "issuer_id": "cybertool-mcp",
-      "key_id": "vendor-ed25519-2026",
+      "key_id": "vendor-ed25519-2026-rotated",
       "public_key_path": "vendor-subscription-public.pem",
-      "fingerprint_sha256": "QMZVFxAFESe2Yfk6QVmtJarGB9+rQCsU+2RW7QCaO64="
+      "fingerprint_sha256": "RLL4lQhuM2Djl258i0MKWDjSXuEk268sPVIzDcLUM3M="
     }
   ]
 }

@@ -11,3 +11,4 @@ agent-transcripts
 terminals
 mcps
 node_modules
+.secrets
