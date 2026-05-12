@@ -75,12 +75,9 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: |
-            type=gha
-            type=local,src=${{ env.BUILDX_CACHE_DIR }}
-          cache-to: |
-            type=gha,mode=max,ignore-error=true
-            type=local,dest=${{ env.BUILDX_CACHE_NEW_DIR }},mode=max
+          cache-from: type=local,src=${{ env.BUILDX_CACHE_DIR }}
+          cache-to: type=local,dest=${{ env.BUILDX_CACHE_NEW_DIR }},mode=min
+
       - name: Move Buildx local cache
         if: always()
         shell: bash
@@ -94,4 +91,4 @@ jobs:
         if: always()
         shell: bash
         run: |
-          docker system df || true      
+          docker system df || true
