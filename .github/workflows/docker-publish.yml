@@ -24,16 +24,28 @@ concurrency:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: muhdidhamm/cybertool-mcp-server
+  BUILDX_CACHE_DIR: /tmp/.buildx-cache
+  BUILDX_CACHE_NEW_DIR: /tmp/.buildx-cache-new
 
 jobs:
   build:
     runs-on: self-hosted
     steps:
+      - name: Clean previous workspace
+        shell: bash
+        run: |
+          sudo mkdir -p "${{ github.workspace }}"
+          sudo find "${{ github.workspace }}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            network=host
+          buildkitd-flags: --debug
 
       - name: Log in to GitHub Container Registry
         if: github.event_name != 'pull_request'
@@ -63,5 +75,23 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=gha
+            type=local,src=${{ env.BUILDX_CACHE_DIR }}
+          cache-to: |
+            type=gha,mode=max,ignore-error=true
+            type=local,dest=${{ env.BUILDX_CACHE_NEW_DIR }},mode=max
+      - name: Move Buildx local cache
+        if: always()
+        shell: bash
+        run: |
+          if [ -d "${{ env.BUILDX_CACHE_NEW_DIR }}" ]; then
+            rm -rf "${{ env.BUILDX_CACHE_DIR }}"
+            mv "${{ env.BUILDX_CACHE_NEW_DIR }}" "${{ env.BUILDX_CACHE_DIR }}"
+          fi
+
+      - name: Show Docker disk usage
+        if: always()
+        shell: bash
+        run: |
+          docker system df || true      
