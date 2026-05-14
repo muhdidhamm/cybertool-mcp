@@ -6,6 +6,69 @@ from tools.helpers import run_command, validate_url, validate_target, sanitize_a
 def register_vuln_tools(mcp):
 
     @mcp.tool()
+    async def gitleaks_scan(
+        source_path: str = ".",
+        config_path: str = "",
+        redact: bool = True,
+        timeout: int = 300,
+    ) -> dict:
+        """Detect hardcoded secrets in source code using Gitleaks.
+
+        Args:
+            source_path: Repository or directory path to scan.
+            config_path: Optional custom gitleaks config path.
+            redact: Redact secret values in output. Default True.
+            timeout: Max seconds.
+        """
+        cmd = ["gitleaks", "detect", "--source", sanitize_arg(source_path)]
+        if config_path:
+            cmd.extend(["--config", sanitize_arg(config_path)])
+        if redact:
+            cmd.append("--redact")
+        return await run_command(cmd, timeout=timeout)
+
+    @mcp.tool()
+    async def trufflehog_scan(
+        target: str,
+        as_json: bool = True,
+        timeout: int = 300,
+    ) -> dict:
+        """Scan filesystem path for leaked secrets using TruffleHog.
+
+        Args:
+            target: File or directory path to scan.
+            as_json: Emit JSON lines output. Default True.
+            timeout: Max seconds.
+        """
+        cmd = ["trufflehog", "filesystem", sanitize_arg(target)]
+        if as_json:
+            cmd.append("--json")
+        return await run_command(cmd, timeout=timeout)
+
+    @mcp.tool()
+    async def trivy_scan(
+        target: str,
+        scan_type: str = "fs",
+        severity: str = "",
+        timeout: int = 300,
+    ) -> dict:
+        """Run Trivy vulnerability scans for filesystem/image/repository targets.
+
+        Args:
+            target: Scan target path/image/repository.
+            scan_type: One of fs, image, repo. Default fs.
+            severity: Optional comma-separated severity filter.
+            timeout: Max seconds.
+        """
+        scan_mode = sanitize_arg(scan_type).lower()
+        if scan_mode not in {"fs", "image", "repo"}:
+            raise ValueError("scan_type must be one of: fs, image, repo")
+        cmd = ["trivy", scan_mode, sanitize_arg(target), "--no-progress"]
+        if severity:
+            cmd.extend(["--severity", sanitize_arg(severity).upper()])
+        return await run_command(cmd, timeout=timeout)
+
+    @mcp.tool()
     async def wpscan(
         url: str,
         enumerate: str = "vp,vt,u",

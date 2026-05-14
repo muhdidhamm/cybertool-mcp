@@ -8,6 +8,27 @@ from tools.helpers import run_command, validate_url, validate_target, sanitize_a
 def register_web_tools(mcp):
 
     @mcp.tool()
+    async def arjun_param_discovery(
+        url: str,
+        methods: str = "GET,POST",
+        wordlist: str = "",
+        timeout: int = 300,
+    ) -> dict:
+        """Discover hidden HTTP parameters using Arjun.
+
+        Args:
+            url: Target URL.
+            methods: Comma-separated HTTP methods. Default GET,POST.
+            wordlist: Optional custom wordlist path.
+            timeout: Max seconds.
+        """
+        url = validate_url(url)
+        cmd = ["arjun", "-u", url, "-m", sanitize_arg(methods).upper()]
+        if wordlist:
+            cmd.extend(["--wordlist", sanitize_arg(wordlist)])
+        return await run_command(cmd, timeout=timeout)
+
+    @mcp.tool()
     async def nikto_scan(
         target: str,
         port: int = 0,
