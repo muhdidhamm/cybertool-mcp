@@ -1,9 +1,49 @@
 """Sprint 1 lightweight MCP tool wrappers (CLI-first integrations)."""
 
 from tools.helpers import run_command, sanitize_arg, validate_url
+import shutil
 
 
 def register_sprint1_tools(mcp):
+    @mcp.tool()
+    async def sprint1_tools_prereq_check(timeout: int = 60) -> dict:
+        """Check whether Sprint 1 CLI binaries are present in PATH.
+
+        This helps verify that tools are callable at runtime by Claude through MCP.
+        """
+        required_bins = {
+            "paramspider": "python3 /opt/ParamSpider/paramspider.py",
+            "linkfinder": "python3 /opt/LinkFinder/linkfinder.py",
+            "secretfinder": "python3 /opt/SecretFinder/SecretFinder.py",
+            "hashid": "hashid",
+            "fail2ban": "fail2ban-client",
+            "aide": "aide",
+            "pwntools_script_runner": "python3",
+            "ropgadget": "ROPgadget",
+            "grype": "grype",
+            "syft": "syft",
+            "checkov": "checkov",
+            "s3scanner": "s3scanner",
+            "kube_bench": "kube-bench",
+            "sigma": "sigma",
+            "apkleaks": "apkleaks",
+            "boofuzz_script_runner": "python3",
+        }
+        status = {}
+        for name, binary in required_bins.items():
+            token = binary.split()[0]
+            status[name] = {
+                "required": binary,
+                "available": shutil.which(token) is not None,
+            }
+        return {
+            "success": True,
+            "checked": len(required_bins),
+            "available": sum(1 for v in status.values() if v["available"]),
+            "status": status,
+            "timeout": timeout,
+        }
+
     @mcp.tool()
     async def paramspider_scan(domain: str, exclude: str = "", timeout: int = 300) -> dict:
         cmd = ["python3", "/opt/ParamSpider/paramspider.py", "--domain", sanitize_arg(domain)]
