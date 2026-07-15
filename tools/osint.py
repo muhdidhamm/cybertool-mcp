@@ -2,10 +2,67 @@
 amass, sublist3r, subfinder, httpx, dmitry, whois, sherlock, spiderfoot,
 dnstwist, snmp, shodan."""
 
-from tools.helpers import run_command, validate_target, sanitize_arg
+from tools.helpers import run_command, validate_target, sanitize_arg, validate_url
 
 
 def register_osint_tools(mcp):
+
+    @mcp.tool()
+    async def photon_crawl(
+        url: str,
+        depth: int = 2,
+        threads: int = 2,
+        only_urls: bool = False,
+        timeout: int = 300,
+    ) -> dict:
+        """Crawl a target website using Photon for OSINT/recon endpoint discovery.
+
+        Args:
+            url: Target URL (http:// or https://).
+            depth: Crawl depth (1-10). Default 2.
+            threads: Concurrent workers (1-20). Default 2.
+            only_urls: Return URL-focused output. Default False.
+            timeout: Max seconds.
+        """
+        url = validate_url(url)
+        depth = max(1, min(10, int(depth)))
+        threads = max(1, min(20, int(threads)))
+
+        cmd = [
+            "python3",
+            "/opt/Photon/photon.py",
+            "-u",
+            url,
+            "-d",
+            str(depth),
+            "-t",
+            str(threads),
+        ]
+        if only_urls:
+            cmd.append("--only-urls")
+        return await run_command(cmd, timeout=timeout)
+
+    @mcp.tool()
+    async def holehe_check(
+        email: str,
+        only_used: bool = True,
+        timeout: int = 300,
+    ) -> dict:
+        """Check account existence across public services using holehe.
+
+        Args:
+            email: Email address to check.
+            only_used: Show only services with positive matches. Default True.
+            timeout: Max seconds.
+        """
+        cleaned_email = sanitize_arg(email)
+        if "@" not in cleaned_email or cleaned_email.startswith("@") or cleaned_email.endswith("@"):
+            raise ValueError("email must be a valid address")
+
+        cmd = ["holehe", cleaned_email]
+        if only_used:
+            cmd.append("--only-used")
+        return await run_command(cmd, timeout=timeout)
 
     @mcp.tool()
     async def theharvester_search(

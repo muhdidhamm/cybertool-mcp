@@ -21,6 +21,7 @@ from tools.disk_incident import register_disk_incident_tools
 from tools.chat_history import register_chat_history_tools
 from tools.session import register_session_tools
 from tools.playbooks import register_playbook_tools
+from tools.sprint1 import register_sprint1_tools
 
 
 def register_all_tools(mcp):
@@ -47,3 +48,4 @@ def register_all_tools(mcp):
     register_disk_incident_tools(mcp)
     register_chat_history_tools(mcp)
     register_playbook_tools(mcp)
+    register_sprint1_tools(mcp)
